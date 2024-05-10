@@ -42,8 +42,7 @@ void RCC_Configuration(void){ //RCC时钟的设置
 		while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET); //等待PLL输出稳定   
 		RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK); //选择SYSCLK时钟源为PLL
 		while(RCC_GetSYSCLKSource() != 0x08); //等待PLL成为SYSCLK时钟源   
-	}
-	
+	}  
 	/*开始使能程序中需要使用的外设时钟*/   
 //	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB |   
 //	RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOE, ENABLE); //APB2外设时钟使能      
@@ -52,5 +51,3 @@ void RCC_Configuration(void){ //RCC时钟的设置
 //	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);   	 
 //	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);    
 }  
-
-

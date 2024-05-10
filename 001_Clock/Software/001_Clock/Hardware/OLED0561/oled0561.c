@@ -6,8 +6,8 @@
 
 /*
 《修改日志》
-1-
-
+1- 2023-10-30 创建
+2- 2023-11-12 修改日期显示方式
 
 */
 
@@ -23,6 +23,7 @@ void OLED0561_Init (void){//OLED屏开显示初始化
 	OLED_DISPLAY_CLEAR(); //清空屏幕内容
 	OLED_DISPLAY_ON(); //OLED屏初始值设置并开显示
 }
+
 void OLED_DISPLAY_ON (void){//OLED屏初始值设置并开显示
 	u8 buf[28]={
 	0xae,//0xae:关显示，0xaf:开显示
@@ -46,6 +47,7 @@ void OLED_DISPLAY_ON (void){//OLED屏初始值设置并开显示
 	}; //
 	I2C_SAND_BUFFER(OLED0561_ADD,COM,buf,28);
 }
+
 void OLED_DISPLAY_OFF (void){//OLED屏关显示
 	u8 buf[3]={
 		0xae,//0xae:关显示，0xaf:开显示
@@ -53,10 +55,12 @@ void OLED_DISPLAY_OFF (void){//OLED屏关显示
 	}; //
 	I2C_SAND_BUFFER(OLED0561_ADD,COM,buf,3);
 }
+
 void OLED_DISPLAY_LIT (u8 x){//OLED屏亮度设置（0~255）
 	I2C_SAND_BYTE(OLED0561_ADD,COM,0x81);
 	I2C_SAND_BYTE(OLED0561_ADD,COM,x);//亮度值
 }
+
 void OLED_DISPLAY_CLEAR(void){//清屏操作
 	u8 j,t;
 	for(t=0xB0;t<0xB8;t++){	//设置起始页地址为0xB0
@@ -85,6 +89,7 @@ void OLED_DISPLAY_8x16(u8 x, //显示汉字的页坐标（从0到7）（此处不可修改）
 			c++;}x++; //页地址加1
 	}
 }
+
 //向LCM发送一个字符串,长度64字符之内。
 //应用：OLED_DISPLAY_8_16_BUFFER(0," DoYoung Studio"); 
 void OLED_DISPLAY_8x16_BUFFER(u8 row,u8 *str){
@@ -125,8 +130,29 @@ void OLED_DISPLAY_PIC1(void){ //显示全屏图片
 	}
 }
 
+uint32_t OLED_Pow(uint32_t X, uint32_t Y) //OLED次方函数
+{
+	uint32_t Result = 1;
+	while (Y--)
+	{
+		Result *= X;
+	}
+	return Result; //返回值等于X的Y次方
+}
 
-
-
-
+void OLED_DISPLAY_8x16_NUM(uint8_t Line, uint8_t Column, uint32_t Number, uint8_t Length) //OLED显示数字(十进制,正数)
+{
+	uint8_t i;
+	for (i = 0; i < Length; i++)							
+	{
+		OLED_DISPLAY_8x16(Line, (Column + i) * 8, Number / OLED_Pow(10, Length - i - 1) % 10 + '0');
+	}
+}
+/**
+  * Line 起始行设置,范围:1~4
+  * Column 起始列位置,范围:1~16
+  * Number 要显示的数字,范围:0~4294967295
+  * Length 要显示数字的长度,范围:1~10
+  */
+ 
 
